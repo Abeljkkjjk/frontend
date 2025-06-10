@@ -1,18 +1,23 @@
 import { apiService, renderer, utils } from './app.js';
 
 const searchInput = document.getElementById('search-input');
+console.log('Search input element:', searchInput); // Debug
+
 const moviesContainer = document.getElementById('popular-movies'); // Usar o container de filmes populares para exibir resultados da busca
 
 let searchTimeout;
 
 searchInput.addEventListener('input', () => {
+    console.log('Input event triggered'); // Debug
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(async () => {
         const query = searchInput.value.trim();
+        console.log('Search query:', query); // Debug
         if (query) {
             utils.showLoading();
             try {
                 const data = await apiService.searchMovies(query);
+                console.log('Search results:', data); // Debug
                 if (data.results && data.results.length > 0) {
                     moviesContainer.innerHTML = ''; // Limpa o conteúdo anterior
                     renderer.renderMovieSection(data.results, 'popular-movies');
