@@ -19,17 +19,41 @@ searchInput.addEventListener('input', () => {
                 const data = await apiService.searchMovies(query);
                 console.log('Search results:', data); // Debug
                 if (data.results && data.results.length > 0) {
-                    // Limpa o container e adiciona um título
-                    moviesContainer.innerHTML = `
-                        <div class="col-12 mb-4">
-                            <h3 class="text-light">Resultados para: "${query}"</h3>
-                        </div>
-                    `;
+                    // Limpa o container
+                    moviesContainer.innerHTML = '';
                     
-                    // Renderiza os filmes encontrados
+                    // Adiciona o título da pesquisa
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'col-12 mb-4';
+                    titleDiv.innerHTML = `<h3 class="text-light">Resultados para: "${query}"</h3>`;
+                    moviesContainer.appendChild(titleDiv);
+                    
+                    // Adiciona cada filme individualmente
                     data.results.forEach(movie => {
-                        const movieCard = renderer.createMovieCard(movie);
-                        moviesContainer.innerHTML += movieCard;
+                        const movieDiv = document.createElement('div');
+                        movieDiv.className = 'col-lg-3 col-md-4 col-sm-6 mb-4';
+                        movieDiv.innerHTML = `
+                            <div class="movie-card" onclick="movieActions.showDetails(${movie.id})">
+                                <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/300x450/141414/ffffff?text=Sem+Imagem'}" 
+                                     alt="${movie.title}" 
+                                     class="img-fluid">
+                                <div class="overlay">
+                                    <h5 class="text-light">${movie.title}</h5>
+                                    <p class="text-light">${movie.overview ? movie.overview.slice(0, 100) + '...' : 'Sem descrição disponível'}</p>
+                                    <div class="movie-info">
+                                        <span class="rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+                                        </span>
+                                        <span class="release-date">
+                                            <i class="fas fa-calendar text-info"></i>
+                                            ${movie.release_date ? new Date(movie.release_date).toLocaleDateString('pt-BR') : 'N/A'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        moviesContainer.appendChild(movieDiv);
                     });
                     
                     // Esconde outras seções

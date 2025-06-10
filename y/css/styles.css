@@ -71,17 +71,12 @@ body {
     right: 0;
     bottom: 0;
     background: linear-gradient(
-        to right,
-        rgba(20, 20, 20, 0.8) 0%,
-        rgba(20, 20, 20, 0.4) 50%,
-        transparent 100%
-    ),
-    linear-gradient(
-        to top,
-        rgba(20, 20, 20, 0.8) 0%,
-        transparent 50%
+        to bottom,
+        rgba(0,0,0,0.3),
+        rgba(0,0,0,0.8)
     );
     pointer-events: none;
+    z-index: 1;
 }
 
 .carousel-caption {
@@ -233,64 +228,51 @@ body {
 /* ===== ESTILOS DOS CARDS DE FILMES ===== */
 .movie-card {
     position: relative;
+    border-radius: 8px;
     overflow: hidden;
-    border-radius: var(--card-border-radius);
-    margin: 1rem 0.5rem;
-    transition: all var(--transition-speed) ease;
-    box-shadow: var(--shadow-medium);
-    background-color: var(--background-secondary);
+    margin-bottom: 20px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+    background-color: #141414;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .movie-card:hover {
-    transform: scale(1.05) translateY(-10px);
-    z-index: 10;
-    box-shadow: var(--shadow-heavy);
+    transform: scale(1.05);
 }
 
 .movie-card img {
     width: 100%;
     height: auto;
-    aspect-ratio: 2/3;
-    object-fit: cover;
     display: block;
-    transition: all var(--transition-speed) ease;
 }
 
-.movie-card:hover img {
-    filter: brightness(1.1);
-}
-
-/* Overlay de Informações */
-.overlay {
+.movie-card .overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1.5rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7) 70%, transparent 100%);
+    padding: 20px;
+    color: white;
     opacity: 0;
-    transition: all var(--transition-speed) ease;
-    transform: translateY(100%);
+    transition: opacity 0.3s ease;
 }
 
 .movie-card:hover .overlay {
     opacity: 1;
-    transform: translateY(0);
 }
 
-.overlay h5 {
-    margin: 0 0 0.8rem;
-    font-size: 1.3rem;
+.movie-card .overlay h5 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
     font-weight: 600;
-    line-height: 1.2;
 }
 
-.overlay p {
-    margin: 0;
-    font-size: 0.95rem;
+.movie-card .overlay p {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
     line-height: 1.4;
-    color: var(--text-secondary);
 }
 
 /* ===== RESPONSIVIDADE ===== */
@@ -341,7 +323,19 @@ body {
     }
     
     .movie-card {
-        margin: 0.5rem 0.25rem;
+        margin-bottom: 15px;
+    }
+    
+    .movie-card .overlay {
+        padding: 15px;
+    }
+    
+    .movie-card .overlay h5 {
+        font-size: 1rem;
+    }
+    
+    .movie-card .overlay p {
+        font-size: 0.8rem;
     }
     
     .carousel-item {
@@ -374,18 +368,6 @@ body {
         padding: 0.6rem 1rem;
         font-size: 0.9rem;
         min-width: 100px;
-    }
-    
-    .overlay {
-        padding: 1rem;
-    }
-    
-    .overlay h5 {
-        font-size: 1.1rem;
-    }
-    
-    .overlay p {
-        font-size: 0.85rem;
     }
 }
 
@@ -441,7 +423,6 @@ body {
     width: 100%;
     z-index: 1000;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
 }
 
 .navbar.scrolled {
@@ -593,22 +574,20 @@ button:focus,
 
 /* ===== SEÇÕES DE FILMES ===== */
 .movie-section {
-    margin-bottom: 4rem;
+    margin-bottom: 40px;
 }
 
 .section-title {
-    color: var(--text-color);
-    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 20px;
     font-weight: 600;
-    margin-bottom: 2rem;
-    padding-left: 0.5rem;
-    border-left: 4px solid var(--primary-color);
     display: flex;
     align-items: center;
 }
 
 .section-title i {
-    color: var(--primary-color);
+    margin-right: 10px;
+    color: #e50914;
 }
 
 /* ===== SKELETON LOADING ===== */
@@ -658,22 +637,15 @@ button:focus,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
-.movie-info span {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+.movie-info .rating {
+    color: #ffd700;
 }
 
-.rating {
-    color: var(--text-color);
-}
-
-.release-date {
-    color: var(--text-secondary);
+.movie-info .release-date {
+    color: #00b4d8;
 }
 
 /* ===== TOAST NOTIFICATIONS ===== */
@@ -691,7 +663,6 @@ button:focus,
     align-items: center;
     gap: 0.5rem;
     animation: slideInRight 0.3s ease-out;
-    backdrop-filter: blur(10px);
 }
 
 @keyframes slideInRight {
@@ -865,23 +836,23 @@ button:focus,
 /* ===== ESTILOS DO CAMPO DE BUSCA ===== */
 .search-container {
     position: relative;
-    min-width: 250px;
+    margin-right: 15px;
 }
 
 .search-input {
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: var(--text-color);
-    padding-left: 2.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 8px 35px 8px 15px;
     border-radius: 4px;
-    transition: all var(--transition-speed) ease;
+    width: 200px;
+    transition: width 0.3s ease;
 }
 
 .search-input:focus {
-    background-color: rgba(0, 0, 0, 0.9);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
-    color: var(--text-color);
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    outline: none;
 }
 
 .search-input::placeholder {
@@ -890,12 +861,10 @@ button:focus,
 
 .search-icon {
     position: absolute;
-    left: 0.8rem;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.6);
-    pointer-events: none;
-    z-index: 10;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .search-input:focus + .search-icon {
