@@ -19,26 +19,47 @@ searchInput.addEventListener('input', () => {
                 const data = await apiService.searchMovies(query);
                 console.log('Search results:', data); // Debug
                 if (data.results && data.results.length > 0) {
-                    moviesContainer.innerHTML = ''; // Limpa o conteúdo anterior
+                    // Limpa o container e adiciona um título
+                    moviesContainer.innerHTML = `
+                        <div class="col-12 mb-4">
+                            <h3 class="text-light">Resultados para: "${query}"</h3>
+                        </div>
+                    `;
+                    
+                    // Renderiza os filmes encontrados
                     renderer.renderMovieSection(data.results, 'popular-movies');
-                    // Esconder outras seções se estiverem visíveis
+                    
+                    // Esconde outras seções
                     document.querySelectorAll('.movie-section').forEach(section => {
                         if (section.id !== 'popular-movies') {
                             section.style.display = 'none';
                         }
                     });
                 } else {
-                    moviesContainer.innerHTML = '<div class="col-12 text-center text-light">Nenhum filme encontrado para sua busca.</div>';
+                    moviesContainer.innerHTML = `
+                        <div class="col-12 text-center text-light">
+                            <h3>Nenhum filme encontrado para: "${query}"</h3>
+                            <p>Tente buscar com outros termos.</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 console.error('Erro ao buscar filmes:', error);
-                utils.showError('Erro ao buscar filmes. Tente novamente mais tarde.', moviesContainer);
+                moviesContainer.innerHTML = `
+                    <div class="col-12 text-center text-light">
+                        <h3>Erro ao buscar filmes</h3>
+                        <p>Por favor, tente novamente mais tarde.</p>
+                    </div>
+                `;
             } finally {
                 utils.hideLoading();
             }
         } else {
-            // Se a busca estiver vazia, recarrega todas as seções de filmes
-            location.reload(); // Recarrega a página para mostrar todas as seções novamente
+            // Se a busca estiver vazia, mostra todas as seções novamente
+            document.querySelectorAll('.movie-section').forEach(section => {
+                section.style.display = 'block';
+            });
+            location.reload();
         }
     }, 500); // Debounce de 500ms
 });

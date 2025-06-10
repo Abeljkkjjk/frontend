@@ -21,48 +21,46 @@ async function fetchCarouselMovies() {
 
 // Função para exibir carrossel de fallback em caso de erro
 function displayFallbackCarousel() {
-    const indicatorsContainer = document.getElementById('carousel-indicators');
-    const innerContainer = document.getElementById('carousel-inner');
-
-    indicatorsContainer.innerHTML = '';
-    innerContainer.innerHTML = `
-        <div class="carousel-item active">
-            <div class="carousel-fallback">
-                <h2>Bem-vindo ao Netflix Clone</h2>
-                <p>Explore milhares de filmes e séries</p>
+    const carousel = document.getElementById('carousel-inner');
+    if (carousel) {
+        carousel.innerHTML = `
+            <div class="carousel-item active">
+                <div class="carousel-image-container">
+                    <img src="https://via.placeholder.com/1920x1080/141414/ffffff?text=Erro+ao+carregar+filmes" class="d-block w-100 carousel-image" alt="Erro ao carregar filmes">
+                </div>
+                <div class="carousel-caption">
+                    <h2>Erro ao carregar filmes</h2>
+                    <p>Por favor, tente novamente mais tarde.</p>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 }
 
 // Função para exibir o carrossel
 function displayCarousel(movies) {
-    const indicatorsContainer = document.getElementById('carousel-indicators');
     const innerContainer = document.getElementById('carousel-inner');
-
-    indicatorsContainer.innerHTML = ''; // Limpa os indicadores anteriores
-    innerContainer.innerHTML = ''; // Limpa os itens do carrossel anteriores
-
+    const indicatorsContainer = document.getElementById('carousel-indicators');
+    
+    if (!innerContainer || !indicatorsContainer) return;
+    
+    innerContainer.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+    
     movies.forEach((movie, index) => {
-        // Cria os indicadores
-        const indicator = document.createElement('button');
-        indicator.setAttribute('type', 'button');
-        indicator.setAttribute('data-bs-target', '#carouselExampleCaptions');
-        indicator.setAttribute('data-bs-slide-to', index);
-        indicator.setAttribute('aria-current', index === 0 ? 'true' : 'false');
-        if (index === 0) indicator.classList.add('active');
-        indicator.setAttribute('aria-label', `Slide ${index + 1}`);
-        indicatorsContainer.appendChild(indicator);
-
-        // Cria os itens do carrossel
-        const carouselItem = document.createElement('div');
-        carouselItem.classList.add('carousel-item');
-        if (index === 0) carouselItem.classList.add('active');
-
-        // Usa backdrop_path para imagens horizontais adequadas ao carrossel
         const imageUrl = movie.backdrop_path 
-            ? BACKDROP_BASE_URL + movie.backdrop_path 
-            : 'https://via.placeholder.com/1920x1080/141414/ffffff?text=Imagem+Indisponível';
+            ? `${BACKDROP_BASE_URL}${movie.backdrop_path}`
+            : 'https://via.placeholder.com/1920x1080/141414/ffffff?text=Sem+Imagem';
+
+        const carouselItem = document.createElement('div');
+        carouselItem.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+        
+        const indicator = document.createElement('button');
+        indicator.type = 'button';
+        indicator.setAttribute('data-bs-target', '#carouselExampleCaptions');
+        indicator.setAttribute('data-bs-slide-to', index.toString());
+        if (index === 0) indicator.classList.add('active');
+        indicatorsContainer.appendChild(indicator);
 
         carouselItem.innerHTML = `
             <div class="carousel-image-container">
@@ -92,15 +90,15 @@ function displayCarousel(movies) {
     });
 }
 
-// Funções auxiliares para os botões do carrosselfunction playMovie(movieId) {
+// Funções auxiliares para os botões do carrossel
+function playMovie(movieId) {
     const tmdbUrl = `https://www.themoviedb.org/movie/${movieId}`;
-    window.open(tmdbUrl, "_blank"); // Abre em uma nova aba
-    console.log(`Redirecionando para a página do filme ID: ${movieId} no TMDb: ${tmdbUrl}`);
+    window.open(tmdbUrl, "_blank");
 }
+
 function addToList(movieId) {
-    // Implementação futura - adicionar à lista do usuário
-    console.log(`Adicionando filme ID: ${movieId} à lista`);
-    alert('Filme adicionado à sua lista!');
+    console.log('Adicionar filme à lista:', movieId);
+    // Implementar lógica de adicionar à lista
 }
 
 // Função para inicializar o carrossel com auto-play
@@ -120,3 +118,5 @@ function initCarousel() {
 
 // Inicializa o carrossel ao carregar a página
 document.addEventListener('DOMContentLoaded', initCarousel);
+
+export { fetchCarouselMovies, displayCarousel };
