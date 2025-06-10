@@ -194,16 +194,26 @@ const renderer = {
 
     // Renderizar seção de filmes
     renderMovieSection(movies, containerId) {
+        console.log('Renderizando filmes:', movies); // Debug
         const container = document.getElementById(containerId);
-        if (!container) return;
-
-        if (!movies || movies.length === 0) {
-            utils.showError('Nenhum filme encontrado nesta categoria.', container);
+        if (!container) {
+            console.error('Container não encontrado:', containerId);
             return;
         }
 
-        const moviesHtml = movies.map(movie => this.createMovieCard(movie)).join('');
-        container.innerHTML = moviesHtml;
+        if (!movies || movies.length === 0) {
+            container.innerHTML = '<div class="col-12 text-center text-light">Nenhum filme encontrado.</div>';
+            return;
+        }
+
+        try {
+            const moviesHtml = movies.map(movie => this.createMovieCard(movie)).join('');
+            container.innerHTML += moviesHtml; // Usando += para adicionar ao conteúdo existente
+            console.log('Filmes renderizados com sucesso'); // Debug
+        } catch (error) {
+            console.error('Erro ao renderizar filmes:', error);
+            container.innerHTML = '<div class="col-12 text-center text-light">Erro ao exibir filmes.</div>';
+        }
     },
 
     // Renderizar loading skeleton

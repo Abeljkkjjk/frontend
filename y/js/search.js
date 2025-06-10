@@ -27,7 +27,10 @@ searchInput.addEventListener('input', () => {
                     `;
                     
                     // Renderiza os filmes encontrados
-                    renderer.renderMovieSection(data.results, 'popular-movies');
+                    data.results.forEach(movie => {
+                        const movieCard = renderer.createMovieCard(movie);
+                        moviesContainer.innerHTML += movieCard;
+                    });
                     
                     // Esconde outras seções
                     document.querySelectorAll('.movie-section').forEach(section => {
