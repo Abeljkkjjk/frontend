@@ -428,3 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Exportar para uso em outros módulos
 export { apiService, renderer, movieActions, dataLoader, utils };
+
+// Funções globais para os botões
+window.playMovie = function(movieId) {
+    const tmdbUrl = `https://www.themoviedb.org/movie/${movieId}`;
+    window.open(tmdbUrl, "_blank");
+};
+
+window.addToList = function(movieId) {
+    console.log('Adicionar filme à lista:', movieId);
+    // Implementar lógica de adicionar à lista
+};
